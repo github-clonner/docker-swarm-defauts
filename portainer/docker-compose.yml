@@ -6,14 +6,8 @@ services:
     volumes:
       - portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      - traefik.backend=portainer
-      - traefik.frontend.rule=Host:portainer.mydomain.local
     ports: 
       - 9000:9000
 volumes:
   portainer:
-networks:
-  portainer: {}
-  proxy:
-    external: true
+  traefik-tmp:
