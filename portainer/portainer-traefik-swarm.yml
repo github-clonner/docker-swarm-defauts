@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      replicas: 1
+      labels:
+        - traefik.docker.network=proxy
+        - traefik.port=9000
+        - traefik.backend=portainer
+        - traefik.frontend.rule=Host:portainer.jeko
+    networks:
+      - proxy
+      - portainer
+  agent:
+    image: portainer/agent
+    networks:
+      - portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    deploy:
+      mode: global
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.agent
+volumes:
+  portainer:
+networks:
+  portainer: {}
+  proxy:
+    external: true
