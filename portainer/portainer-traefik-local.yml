@@ -28,10 +28,10 @@ services:
       - portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      # - traefik.docker.network=proxy
       - traefik.backend=portainer
-      - traefik.frontend.rule=Host:portainer.dev.jeko.local
+      - traefik.frontend.headers.frameDeny=true
       - traefik.port=9000
+      # - traefik.frontend.rule=Host:portainer.customDomain.local
     networks:
       - proxy
 volumes:

@@ -13,7 +13,8 @@ services:
         - traefik.docker.network=proxy
         - traefik.port=9000
         - traefik.backend=portainer
-        - traefik.frontend.rule=Host:portainer.jeko
+        - traefik.frontend.headers.frameDeny=true
+        # - traefik.frontend.rule=Host:portainer.customDomain.local
     networks:
       - proxy
       - portainer
