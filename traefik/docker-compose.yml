@@ -24,6 +24,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
     deploy:
       replicas: 1
+      mode: replicated
 networks:
   proxy:
     name: proxy
