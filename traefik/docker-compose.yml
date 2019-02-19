@@ -1,14 +1,16 @@
 version: '3.7'
 services:
-  reverse-proxy:
-    image: traefik # The official Traefik docker image
+  traefik:
+    image: traefik:v1.7.9 # The official Traefik docker image
     command:
       - --api
       - --debug
       - --docker
+      - --docker.domain=customdomain.local
       - --docker.swarmMode
       - --docker.watch
       - --docker.network=proxy
+      - --docker.swarmModeRefreshSeconds=1
       - --defaultentrypoints=http
     ports:
       - target: 80
@@ -28,10 +30,11 @@ services:
       labels:
        - traefik.docker.network=proxy
        - traefik.port=8080
+       - traefik.bakend=traefik
        - traefik.frontend.headers.browserXSSFilter=true
        - traefik.frontend.headers.frameDeny=true
        - traefik.frontend.headers.contentTypeNosniff=true
-       - traefik.frontend.rule=Host:traefik.customdomain.local
+       - traefik.frontend.rule=Host:traefik.customDomain.local
 networks:
   proxy:
     name: proxy
