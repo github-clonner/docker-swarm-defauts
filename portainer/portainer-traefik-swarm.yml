@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   portainer:
-    image: portainer/portainer
+    image: portainer/portainer:1.20.1
     volumes:
       - portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
@@ -14,12 +14,12 @@ services:
         - traefik.port=9000
         - traefik.backend=portainer
         - traefik.frontend.headers.frameDeny=true
-        # - traefik.frontend.rule=Host:portainer.customDomain.local
+        - traefik.frontend.rule=Host:portainer.customDomain.local
     networks:
       - proxy
       - portainer
   agent:
-    image: portainer/agent
+    image: portainer/agent:1.2.1
     networks:
       - portainer
     volumes:
@@ -32,6 +32,7 @@ services:
 volumes:
   portainer:
 networks:
-  portainer: {}
+  portainer: 
+    name: portainer
   proxy:
     external: true
