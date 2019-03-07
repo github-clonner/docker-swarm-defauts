@@ -2,23 +2,23 @@ version: '3.7'
 services:
   traefik:
     image: traefik:v1.7.9 # The official Traefik docker image
-    command:
-      - --api
-      - --debug
-      - --docker
-      - --docker.domain=customdomain.local
-      - --docker.swarmMode
-      - --docker.watch
-      - --docker.network=proxy
-      - --docker.swarmModeRefreshSeconds=1
-      - --defaultentrypoints=http
+    # command:
+      # - --api
+      # - --debug
+      # - --docker
+      # - --docker.domain=customdomain.local
+      # - --docker.swarmMode
+      # - --docker.watch
+      # - --docker.network=proxy
+      # - --docker.swarmModeRefreshSeconds=1
+      # - --defaultentrypoints=http
     ports:
       - target: 80
         published: 80
         mode: host
-      # - target: 8080
-      #   published: 8080
-      #   mode: host
+      - target: 8080
+        published: 8080
+        mode: host
     networks:
       - proxy
     volumes:
