@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   traefik:
-    image: traefik:v1.7.9 # The official Traefik docker image
+    image: traefik:v1.7.10 # The official Traefik docker image
     # command:
       # - --api
       # - --debug
