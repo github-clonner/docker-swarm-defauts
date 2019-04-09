@@ -1,0 +1,62 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik:v1.7.10 # The official Traefik docker image
+    command:
+      - --api
+      - --debug
+      - --docker
+      - --docker.swarmMode
+      - --docker.watch
+      - --docker.network=proxy
+      - --docker.swarmModeRefreshSeconds=1
+      - --defaultentrypoints=http,https
+      - --entryPoints=Name:https Address::443 TLS
+      - --entryPoints=Name:http Address::80
+      - --acme
+      - --acme.acmelogging
+      - --acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - --acme.domains=customdomain.com
+      - --acme.dnsChallenge=true
+      - --acme.dnschallenge.delaybeforecheck=0
+      - --acme.dnsChallenge.provider=cloudflare
+      - --acme.dnsChallenge.resolvers=1.1.1.1
+      - --acme.httpchallenge=false
+      - --acme.email=webmaster@customdomain.com
+      - --acme.entryPoint=https
+      - --acme.onhostrule=true
+      - --acme.storage=acme.json
+    environment: 
+     #please look at https://docs.traefik.io/configuration/acme/#provider
+     # using clouldflare as dns provider
+     CF_API_KEY: xxxxxx
+     CF_API_EMAIL: webmaster@customdomain.com
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+    networks:
+      - proxy
+    volumes:
+      - traefik-tmp:/tmp
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+    deploy:
+      replicas: 1
+      mode: replicated
+      labels:
+       - traefik.docker.network=proxy
+       - traefik.port=8080
+       - traefik.bakend=traefik
+       - traefik.frontend.headers.browserXSSFilter=true
+       - traefik.frontend.headers.frameDeny=true
+       - traefik.frontend.headers.contentTypeNosniff=true
+       - traefik.frontend.rule=Host:traefik.customDomain.local
+networks:
+  proxy:
+    name: proxy
+    driver: overlay
+volumes:
+  traefik-tmp:
