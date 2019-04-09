@@ -12,7 +12,7 @@ services:
       - --docker.swarmModeRefreshSeconds=1
       - --defaultentrypoints=http,https
       - --entryPoints=Name:https Address::443 TLS
-      - --entryPoints=Name:http Address::80
+      - --entryPoints=Name:http Address::80 Redirect.EntryPoint:https
       - --acme
       - --acme.acmelogging
       - --acme.caserver=https://acme-v02.api.letsencrypt.org/directory
@@ -53,6 +53,7 @@ services:
        - traefik.frontend.headers.browserXSSFilter=true
        - traefik.frontend.headers.frameDeny=true
        - traefik.frontend.headers.contentTypeNosniff=true
+       - traefik.frontend.headers.forceSTSHeade=true
        - traefik.frontend.rule=Host:traefik.customDomain.local
 networks:
   proxy:
