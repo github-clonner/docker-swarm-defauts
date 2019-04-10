@@ -2,16 +2,16 @@ version: '3.7'
 services:
   traefik:
     image: traefik:v1.7.10 # The official Traefik docker image
-    # command:
-      # - --api
-      # - --debug
-      # - --docker
-      # - --docker.domain=customdomain.local
-      # - --docker.swarmMode
-      # - --docker.watch
-      # - --docker.network=proxy
-      # - --docker.swarmModeRefreshSeconds=1
-      # - --defaultentrypoints=http
+    command:
+      - --api
+      - --debug
+      - --docker
+      - --docker.domain=customdomain.local
+      - --docker.swarmMode
+      - --docker.watch
+      - --docker.network=proxy
+      - --docker.swarmModeRefreshSeconds=1
+      - --defaultentrypoints=http
     ports:
       - target: 80
         published: 80
@@ -34,6 +34,7 @@ services:
        - traefik.frontend.headers.browserXSSFilter=true
        - traefik.frontend.headers.frameDeny=true
        - traefik.frontend.headers.contentTypeNosniff=true
+       - traefik.frontend.headers.customResponseHeaders=x-robots-tag:noindex
        - traefik.frontend.rule=Host:traefik.customDomain.local
 networks:
   proxy:
